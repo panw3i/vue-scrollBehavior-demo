@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/vue-router.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <title>滚动行为案例</title>
+    <style>
+        #home{
+            background: salmon;
+            height: 500px;
+        }
+        #foo{
+            background: khaki;
+            height: 1000px;
+        }
+        #bar{
+            background: chartreuse;
+            height: 1000px;
+        }
+        #anli{
+            background: hotpink;
+            height: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+                <div class="container-fluid">
+                    <div class="navbar-header" >
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        <a class="navbar-brand" href="javascript:;">Vue</a>
+                    </div>
+            
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><router-link to="/">首页</router-link></li>
+                            <li><router-link to="/foo">关于我们</router-link></li>
+                            <li><router-link to="/bar">网站模板</router-link></li>
+                            <li><router-link to="/anli">模板标签</router-link></li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </nav>
+        <router-view></router-view>
+    </div>
+
+    <script>
+        var Home = {
+            template:`
+                    <div class="jumbotron banner" id='home'><p>
+                            Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式框架。
+                            与其他重量级框架不同的是，Vue 采用自底向上增量开发的设计。
+                            Vue 的核心库只关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合。
+                            另一方面，当与单文件组件和 Vue 生态系统支持的库结合使用时，
+                            Vue 也完全能够为复杂的单页应用程序提供驱动。
+                    </p></div>
+                `
+        }
+        var Foo = {
+            template:`
+                    <div class="jumbotron banner" id='foo'><p>
+                            使用前端路由，当切换到新路由时，想要页面滚到顶部，或者是保持原先的滚动位置，
+                            就像重新加载页面那样。 vue-router 能做到，而且更好，
+                            它让你可以自定义路由切换时页面如何滚动。
+                    </p></div>
+                `
+        }
+        var Bar = {
+            template:`
+                    <div class="jumbotron banner" id='bar'><p>
+                            scrollBehavior 方法接收 to 和 from 路由对象。
+                            第三个参数 savedPosition 当且仅当 popstate 导航 
+                            (通过浏览器的 前进/后退 按钮触发) 时才可用。
+                    </p></div>
+                `
+        }
+        var Anli = {
+            template:`
+                    <div class="jumbotron banner" id='anli'><p>
+                            官方指南假设你已有 HTML、CSS 和 JavaScript 中级前端知识。
+                            如果你刚开始学习前端开发，将框架作为你的第一步可能不是最好的主意——
+                            掌握好基础知识再来！之前有其他框架的使用经验对于学习 Vue.js 是有帮助的，
+                            但这不是必需的。
+                    </p></div>
+                `
+        }
+
+        var router = new VueRouter({
+            mode:"history",
+            //控制滚动位置
+            scrollBehavior (to, from, savedPosition) {
+                //判断如果滚动条的位置存在直接返回到当前位置，否者返回到起点
+                if (savedPosition) {
+                    console.log(from);
+                    return savedPosition
+               
+                } else {
+                    if (to.hash) {
+                        return {selector: to.hash}
+                    }
+                }
+            },
+            routes:[
+                {
+                    path:"/",component:Home
+                },
+                {
+                    path:"/foo",component:Foo
+                },
+                {
+                    path:"/bar",component:Bar
+                },
+                {
+                    path:"/anli",component:Anli
+                }
+            ]
+        });
+        var vm = new Vue({
+            el:"#app",
+            router
+        });
+    </script>
+</body>
+</html>
